@@ -20,7 +20,6 @@ public class CustomerEntity implements Serializable{
 
     @Id
     @Column(name = "id")
-    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer customer_id;
 
@@ -39,10 +38,11 @@ public class CustomerEntity implements Serializable{
     private String lastName;
 
     @Column(name = "email")
+    @NotNull
     @Size(max = 50)
     private String email;
 
-    @Column(name = "contactnumber" ,unique = true)
+    @Column(name = "contact_number" ,unique = true)
     @NotNull
     @Size(max = 30)
     private String contactnumber;
