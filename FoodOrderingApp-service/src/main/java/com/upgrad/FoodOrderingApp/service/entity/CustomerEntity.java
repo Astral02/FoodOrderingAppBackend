@@ -20,6 +20,7 @@ public class CustomerEntity implements Serializable{
 
     @Id
     @Column(name = "id")
+    @NotNull
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer customer_id;
 
