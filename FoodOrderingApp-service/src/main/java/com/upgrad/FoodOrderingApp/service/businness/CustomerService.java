@@ -29,6 +29,12 @@ public class CustomerService {
     @Autowired
     private PasswordCryptographyProvider passwordCryptographyProvider;
 
+    /**
+     * Save Customer
+     * @param customerEntity
+     * @return
+     * @throws SignUpRestrictedException
+     */
     @Transactional(propagation = Propagation.REQUIRED)
     public CustomerEntity saveCustomer(CustomerEntity customerEntity) throws SignUpRestrictedException {
 
@@ -50,6 +56,13 @@ public class CustomerService {
         }
     }
 
+    /**
+     * authenticate based on the token
+     * @param contactnumber
+     * @param password
+     * @return
+     * @throws AuthenticationFailedException
+     */
     @Transactional(propagation = Propagation.REQUIRED)
     public CustomerAuthEntity authenticate(final String contactnumber, final String password) throws AuthenticationFailedException {
 
@@ -79,6 +92,12 @@ public class CustomerService {
         }
     }
 
+    /**
+     *  logout
+     * @param Access_Token
+     * @return
+     * @throws AuthorizationFailedException
+     */
     @Transactional(propagation = Propagation.REQUIRED)
     public CustomerAuthEntity logout(final String Access_Token) throws AuthorizationFailedException {
         CustomerAuthEntity customerAuthEntity = customerDao.getCustomerAuthToken(Access_Token);
@@ -95,20 +114,15 @@ public class CustomerService {
         return customerAuthEntity;
     }
 
-    public void validatePasswordUpdate(String oldPassword, String newPassword, CustomerEntity customer) throws UpdateCustomerException {
-
-        if (oldPassword == null || newPassword == null) {
-            throw new UpdateCustomerException("UCR-003", "No field should be empty");
-        } else if (!isPasswordStrong(newPassword)) {
-            throw new UpdateCustomerException("UCR-001", "Weak password!");
-        }
-        final String decryptedPassword = passwordCryptographyProvider.encrypt(oldPassword, customer.getSalt());
-        if (!decryptedPassword.equals(customer.getPassword())) {
-            throw new UpdateCustomerException("UCR-004", "Incorrect old password");
-        }
-    }
-
-        @Transactional(propagation = Propagation.REQUIRED)
+    /**
+     *  validate and update password
+     * @param oldPassword
+     * @param newPassword
+     * @param customer
+     * @return
+     * @throws UpdateCustomerException
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
     public CustomerEntity updateCustomerPassword(String oldPassword, String newPassword, CustomerEntity customer) throws UpdateCustomerException {
 
         if (!isPasswordStrong(newPassword)) {
@@ -125,6 +139,12 @@ public class CustomerService {
         return changedCustomerPassword;
     }
 
+    /**
+     * update customer
+     * @param customer
+     * @return
+     * @throws UpdateCustomerException
+     */
     @Transactional(propagation = Propagation.REQUIRED)
     public CustomerEntity updateCustomer(CustomerEntity customer) throws UpdateCustomerException {
 
@@ -134,20 +154,14 @@ public class CustomerService {
         return customerDao.updateCustomer(customer);
     }
 
-//    public void validateCustomer(final String authorization) throws AuthorizationFailedException
-//    {
-//        final CustomerAuthEntity customerAuthEntity = customerDao.getCustomerAuthToken(authorization);
-//        if (customerAuthEntity == null) {
-//            throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in.");
-//        } else if (authTokenValidityService.isLoggedOut(customerAuthEntity)) {
-//            throw new AuthorizationFailedException("ATHR-002", "Customer is logged out. Log in again to access this endpoint.");
-//        } else if (authTokenValidityService.isExpired(customerAuthEntity)) {
-//            throw new AuthorizationFailedException("ATHR-003", "Your session is expired. Log in again to access the endpoint");
-//        }
-//    }
-
+    /**
+     *  update the customer
+     * @param authorization
+     * @return
+     * @throws AuthorizationFailedException
+     */
     @Transactional(propagation = Propagation.REQUIRED)
-    public CustomerEntity getCustomer(final String authorization) throws AuthorizationFailedException  {
+    public CustomerEntity getCustomer(final String authorization) throws AuthorizationFailedException {
         final CustomerAuthEntity customerAuthEntity = customerDao.getCustomerAuthToken(authorization);
         if (customerAuthEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", "Customer is not Logged in.");
@@ -159,18 +173,11 @@ public class CustomerService {
         return customerAuthEntity.getCustomer();
     }
 
-    public String[] validateAuthenticationFormat(String auth) throws AuthenticationFailedException
-    {
-        byte[] decode = Base64.getDecoder().decode(auth.split("Basic ")[1]);
-        String decodeText = new String(decode);
-        String[] decodeArray = decodeText.split(":");
-        if(decodeArray.length < 2)
-        {
-            throw new AuthenticationFailedException("ATHR-003", "Incorrect format of decoded customer name and password");
-        }
-        return decodeArray;
-    }
-
+    /**
+     *  Validate the email
+     * @param email
+     * @return
+     */
     public static boolean isValidEmail(String email) {
         String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
         Pattern pat = Pattern.compile(emailRegex);
@@ -179,6 +186,11 @@ public class CustomerService {
         return pat.matcher(email).matches();
     }
 
+    /**
+     *  Validate the contact number
+     * @param number
+     * @return
+     */
     public static boolean isValidContactNumber(String number) {
         String contactNumberRegex = "^$|[0-9]{10}";
         Pattern pat = Pattern.compile(contactNumberRegex);
@@ -187,14 +199,15 @@ public class CustomerService {
         return pat.matcher(number).matches();
     }
 
+    /**
+     * Validate the password strength
+     * @param newPassword
+     * @return
+     */
     public static boolean isPasswordStrong(String newPassword) {
-        //String passwordRegex = "^(?=.*[a-z])(?=.*d)(?=.*[#@$%&*!^])(?=.*[A-Z]).{8,}$";
-        //Pattern pat = Pattern.compile(passwordRegex);
         if (newPassword == null)
             return false;
-        //return pat.matcher(password).matches();
-
-        if(newPassword.length() < 8 || !newPassword.matches("(?=.*[0-9]).*") || !newPassword.matches("(?=.*[A-Z]).*")|| !newPassword.matches("(?=.*[#@$%&*!^]).*")) {
+        if (newPassword.length() < 8 || !newPassword.matches("(?=.*[0-9]).*") || !newPassword.matches("(?=.*[A-Z]).*") || !newPassword.matches("(?=.*[#@$%&*!^]).*")) {
             return false;
         }
         return true;
