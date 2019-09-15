@@ -17,8 +17,8 @@ public class ItemService {
     @Autowired
     private OrderDao orderDao;
 
-//    @Autowired
-//    private OrderItemDao orderItemDao;
+   @Autowired
+    private OrderItemDao orderItemDao;
 
     @Autowired
     private RestaurantDao restaurantDao;
@@ -30,9 +30,7 @@ public class ItemService {
      * Returns item for a given UUID
      *
      * @param uuid UUID of item entity
-     *
      * @return ItemEntity object
-     *
      * @throws ItemNotFoundException If validation on item fails
      */
     public ItemEntity getItemByUUID(String uuid) throws ItemNotFoundException {
@@ -47,13 +45,32 @@ public class ItemService {
      * Returns popular items for a restaurant
      *
      * @param restaurantEntity UUID of restaurant entity
-     *
      * @return List<ItemEntity> object
      */
     public List<ItemEntity> getItemsByPopularity(RestaurantEntity restaurantEntity) {
         List<ItemEntity> itemEntityList = new ArrayList<>();
-        //TODO: will be impelemented along with order controller
-        return itemEntityList;
+        for (OrderEntity orderEntity : orderDao.getOrdersByRestaurant(restaurantEntity)) {
+            for (OrderItemEntity orderItemEntity : orderItemDao.getItemsByOrder(orderEntity)) {
+                itemEntityList.add(orderItemEntity.getItem());
+            }
+        }
+
+        // count all with map
+        Map<String, Integer> map = new HashMap<String, Integer>();
+        for (ItemEntity itemEntity : itemEntityList) {
+            Integer count = map.get(itemEntity.getUuid());
+            map.put(itemEntity.getUuid(), (count == null) ? 1 : count + 1);
+        }
+
+        // sort map
+        Map<String, Integer> treeMap = new TreeMap<String, Integer>(map);
+        List<ItemEntity> sortedItemEntityList = new ArrayList<ItemEntity>();
+        for (Map.Entry<String, Integer> entry : treeMap.entrySet()) {
+            sortedItemEntityList.add(itemDao.getItemByUUID(entry.getKey()));
+        }
+        Collections.reverse(sortedItemEntityList);
+
+        return sortedItemEntityList;
     }
 
     /**
@@ -61,7 +78,6 @@ public class ItemService {
      *
      * @param restaurantUUID UUID of restaurant entity
      * @param categoryUUID UUID of category entity
-     *
      * @return List<ItemEntity> object
      */
     public List<ItemEntity> getItemsByCategoryAndRestaurant(String restaurantUUID, String categoryUUID) {
