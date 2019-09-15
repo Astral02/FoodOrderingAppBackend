@@ -21,13 +21,23 @@ public class OrderController {
     private OrderService orderService;
 
     @RequestMapping(method = RequestMethod.GET, path = "/order/coupon/{coupon_name}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<CouponDetailsResponse> getCoupon(@RequestHeader final String authorization, @PathVariable final String coupon_name)
+    public ResponseEntity<CouponDetailsResponse> getCoupon(@RequestHeader final String authorization, @PathVariable final String couponName)
             throws AuthorizationFailedException, CouponNotFoundException {
 
         String[] bearerToken = authorization.split("Bearer ");
         final ResponseEntity<CouponDetailsResponse> couponDetailsResponseResponseEntity = new ResponseEntity<CouponDetailsResponse>
-                ((MultiValueMap<String, String>) orderService.getCoupon(bearerToken[1], coupon_name), HttpStatus.OK);
+                ((MultiValueMap<String, String>) orderService.getCoupon(bearerToken[1], couponName), HttpStatus.OK);
         return couponDetailsResponseResponseEntity;
 
     }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/order/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<CouponDetailsResponse> getPastOrders(@RequestHeader final String authorization)
+            throws AuthorizationFailedException {
+        return null;
+
+        //to be completed
+
+    }
+
 }
