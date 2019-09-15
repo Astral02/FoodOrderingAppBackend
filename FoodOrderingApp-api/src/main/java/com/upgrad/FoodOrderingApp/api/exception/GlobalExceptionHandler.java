@@ -19,7 +19,7 @@ public class GlobalExceptionHandler extends Exception {
     @ExceptionHandler(AuthenticationFailedException.class)
     public ResponseEntity<ErrorResponse> resourceNotFoundException(AuthenticationFailedException exe , WebRequest request){
         return new ResponseEntity<ErrorResponse>(
-                new ErrorResponse().code(exe.getCode()).message(exe.getErrorMessage()), HttpStatus.FORBIDDEN
+                new ErrorResponse().code(exe.getCode()).message(exe.getErrorMessage()), HttpStatus.UNAUTHORIZED
         );
     }
     @ExceptionHandler(AuthorizationFailedException.class)
@@ -36,14 +36,8 @@ public class GlobalExceptionHandler extends Exception {
     }
     @ExceptionHandler(UpdateCustomerException.class)
     public ResponseEntity<ErrorResponse> unauthorizedException(UpdateCustomerException exe , WebRequest request){
-
-        HttpStatus status = HttpStatus.UNAUTHORIZED ;
-        if(exe.getCode().equalsIgnoreCase("UCR-003"))
-        {
-            status = HttpStatus.BAD_REQUEST;
-        }
         return new ResponseEntity<ErrorResponse>(
-                new ErrorResponse().code(exe.getCode()).message(exe.getErrorMessage()), status
+                new ErrorResponse().code(exe.getCode()).message(exe.getErrorMessage()), HttpStatus.BAD_REQUEST
         );
     }
     @ExceptionHandler(InvalidRatingException.class)
