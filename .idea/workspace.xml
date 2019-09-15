@@ -17,10 +17,6 @@
       <change beforePath="$PROJECT_DIR$/FoodOrderingApp-api/src/test/java/com/upgrad/FoodOrderingApp/api/controller/RestaurantControllerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/FoodOrderingApp-api/src/test/java/com/upgrad/FoodOrderingApp/api/controller/RestaurantControllerTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FoodOrderingApp-db/FoodOrderingApp-db.iml" beforeDir="false" afterPath="$PROJECT_DIR$/FoodOrderingApp-db/FoodOrderingApp-db.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FoodOrderingApp-service/FoodOrderingApp-service.iml" beforeDir="false" afterPath="$PROJECT_DIR$/FoodOrderingApp-service/FoodOrderingApp-service.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FoodOrderingApp-service/src/main/java/com/upgrad/FoodOrderingApp/service/StateDao.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/FoodOrderingApp-service/src/main/java/com/upgrad/FoodOrderingApp/service/entity/AddressEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/FoodOrderingApp-service/src/main/java/com/upgrad/FoodOrderingApp/service/entity/AddressEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FoodOrderingApp-service/src/main/java/com/upgrad/FoodOrderingApp/service/entity/CustomerAddressEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/FoodOrderingApp-service/src/main/java/com/upgrad/FoodOrderingApp/service/entity/CustomerAddressEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FoodOrderingApp-service/src/main/java/com/upgrad/FoodOrderingApp/service/entity/OrdersEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/FoodOrderingApp-service/src/main/java/com/upgrad/FoodOrderingApp/service/entity/OrdersEntity.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FoodOrderingAppBackend.iml" beforeDir="false" afterPath="$PROJECT_DIR$/FoodOrderingAppBackend.iml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -497,7 +493,7 @@
     <property name="RequestMappingsPanelWidth2" value="75" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1568563305409" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1568563429263" />
     <property name="last_directory_selection" value="$PROJECT_DIR$/FoodOrderingApp-api/src/main/java/com/upgrad/FoodOrderingApp/api/controller" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
