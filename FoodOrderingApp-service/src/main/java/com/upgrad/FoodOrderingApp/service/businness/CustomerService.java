@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
 import java.util.Base64;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 @Service
@@ -80,15 +81,12 @@ public class CustomerService {
             final ZonedDateTime now = ZonedDateTime.now();
             final ZonedDateTime expiresAt = now.plusHours(8);
             customerAuthEntity.setAccessToken(jwtTokenProvider.generateToken(customerEntity.getUuid(), now, expiresAt));
-            customerAuthEntity.setUuid(customerEntity.getUuid());
+            customerAuthEntity.setUuid(UUID.randomUUID().toString());
             customerAuthEntity.setLogin_at(now);
             customerAuthEntity.setExpires_at(expiresAt);
-            customerDao.createAuthToken(customerAuthEntity);
-            customerDao.updateCustomer(customerEntity);
-            return customerAuthEntity;
+            return customerDao.createAuthToken(customerAuthEntity);
         } else {
             throw new AuthenticationFailedException("ATH-002", "Invalid Credentials");
-            //throw new AuthenticationFailedException("ATH-003","Incorrect format of decoded customer name and password");
         }
     }
 

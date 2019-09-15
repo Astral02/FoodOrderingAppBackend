@@ -30,12 +30,9 @@ public class AddressService {
 
     /**
      * This method implements the business logic for 'save address' endpoint
-     *
      * @param addressEntity new address will be created from given AddressEntity object
      * @param customerEntity customer whose address is to be updated
-     *
      * @return AddressEntity object
-     *
      * @throws SaveAddressException exception if any of the validation fails on customer details
      */
     @Transactional(propagation = Propagation.REQUIRED)
@@ -53,10 +50,7 @@ public class AddressService {
             throw new SaveAddressException("SAR-001", "No field can be empty");
         }
 
-        // Validation for format of Pincode
-        // This is to validate Indian Post code.
-        // [1-9]: Matches exactly one digit from 1 to 9.
-        // [0-9]{5}: Matches exactly five digits in the inclusive range 0-9
+        // Validation for format of Indian Pincode
         if(!addressEntity.getPincode().matches("^[1-9][0-9]{5}$")){
             throw new SaveAddressException("SAR-002", "Invalid pincode");
         }
@@ -73,11 +67,8 @@ public class AddressService {
 
     /**
      * Returns state for a given UUID
-     *
      * @param stateUUID UUID of state entity
-     *
      * @return StateEntity object
-     *
      * @throws AddressNotFoundException If validation on state fails
      */
     public StateEntity getStateByUUID(String stateUUID) throws AddressNotFoundException {
@@ -90,9 +81,7 @@ public class AddressService {
 
     /**
      * Returns all addresses for a given customer
-     *
      * @param customerEntity Customer whose addresses are to be returned
-     *
      * @return List<AddressEntity> object
      */
     public List<AddressEntity> getAllAddress(CustomerEntity customerEntity) {
@@ -101,7 +90,6 @@ public class AddressService {
 
     /**
      * This method implements the business logic for 'Get All States' endpoint
-     *
      * @return List<StateEntity> object
      */
     public List<StateEntity> getAllStates() {
@@ -113,9 +101,7 @@ public class AddressService {
      *
      * @param addressUUID Address UUID
      * @param customerEntity Customer whose has made request
-     *
      * @return AddressEntity object
-     *
      * @throws AddressNotFoundException If validation on address fails
      * @throws AuthorizationFailedException If validation on customer fails
      */
@@ -135,14 +121,11 @@ public class AddressService {
 
     /**
      * Deletes given address entity
-     *
      * @param addressEntity Address to delete
-     *
      * @return AddressEntity object
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public AddressEntity deleteAddress(AddressEntity addressEntity) {
-        addressEntity.setActive(0);
-        return addressDao.updateAddressEntity(addressEntity);
+        return addressDao.deleteAddressEntity(addressEntity);
     }
 }
