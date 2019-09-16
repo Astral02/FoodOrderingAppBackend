@@ -24,6 +24,7 @@ import java.util.UUID;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/")
 public class CustomerController {
@@ -38,7 +39,7 @@ public class CustomerController {
      * @throws SignUpRestrictedException
      */
     @RequestMapping(method = RequestMethod.POST, path = "/customer/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<SignupCustomerResponse> signup(@RequestBody final SignupCustomerRequest signupCustomerRequest) throws SignUpRestrictedException {
+    public ResponseEntity<SignupCustomerResponse> signup(@RequestBody(required = false) final SignupCustomerRequest signupCustomerRequest) throws SignUpRestrictedException {
 
         if (StringUtils.isEmpty(signupCustomerRequest.getFirstName()) ||
                 StringUtils.isEmpty(signupCustomerRequest.getEmailAddress()) ||
@@ -68,7 +69,6 @@ public class CustomerController {
      * @return
      * @throws AuthenticationFailedException
      */
-    @CrossOrigin
     @RequestMapping(method = RequestMethod.POST, path = "/customer/login", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<LoginResponse> login(@RequestHeader("authorization") final String authorization) throws AuthenticationFailedException {
         //validate the decoding of the token
@@ -98,6 +98,9 @@ public class CustomerController {
         //Set the header
         HttpHeaders headers = new HttpHeaders();
         headers.add("access-token", customerAuthEntity.getAccessToken());
+        List<String> header = new ArrayList<>();
+        header.add("access-token");
+        headers.setAccessControlExposeHeaders(header);
         return new ResponseEntity<LoginResponse>(loginResponse, headers, HttpStatus.OK);
     }
 
@@ -161,7 +164,7 @@ public class CustomerController {
      * @throws AuthorizationFailedException
      */
     @RequestMapping(method = PUT, path = "/customer/password", consumes = APPLICATION_JSON_UTF8_VALUE, produces = APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<UpdatePasswordRequest> updateCustomerPassword(@RequestHeader("authorization") String authorization, @RequestBody final UpdatePasswordRequest updatePasswordRequest)
+    public ResponseEntity<UpdatePasswordRequest> updateCustomerPassword(@RequestHeader("authorization") String authorization, @RequestBody(required = false)final UpdatePasswordRequest updatePasswordRequest)
             throws UpdateCustomerException, AuthorizationFailedException {
         //validate if password is not empty
         if (updatePasswordRequest.getOldPassword().equals("") || updatePasswordRequest.getNewPassword().equals("")) {
